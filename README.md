@@ -48,7 +48,7 @@ The Job_1 is a job-array that triggers 5 processes to add lines to pre-existing 
 
 2. To add a bit more of complexity, now let's add a third script to add a numeric line to the pre-exisiting files after the *Job_0* and *Job_1* were successfully completed.
 
-![Image 2.Job0_Job1_Job2](images/fig1_slurm_array2.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
+![Image 2.Job0_Job1_Job2](images/fig2_slurm_array2.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
 
 
 Now we need to link these dependencies in a logic way to build a Slurm-array with dependencies pipeline.
