@@ -48,7 +48,7 @@ The Job_1 is a job-array that triggers 5 processes to add lines to pre-existing 
 
 2. To add a bit more of complexity, now let's add a third script to add a numeric line to the pre-exisiting files after the *Job_0* and *Job_1* were successfully completed.
 
-![Image 2.Job0_Job1_Job2](images/fig2_slurm_array2.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
+![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
 
 
 Now we need to link these dependencies in a logic way to build a Slurm-array with dependencies pipeline.
@@ -65,7 +65,7 @@ echo ""
 sbatch --array=1-5 --dependency=aftercorr:${ArrayAID} Job_1.sh
 ```
 
-**--parsable ** option capture the slurm ID (number) assigned to control each *Array Id*. Thus, with *ArrayAID* variable we can conditioned the next task. 
+**--parsable** option capture the slurm ID (number) assigned to control each *Array Id*. Thus, with *ArrayAID* variable we can conditioned the next task. 
 
 After successfully completed the corresponding array process using the *ArrayAID*, it starts the corresponding array process in Job_1
 
@@ -88,19 +88,35 @@ sbatch --array=1-5 --dependency=aftercorr:${ArrayBID} Job_2.sh
 ```
 
 
-Again we use **--parsable ** option, now beside to capture the *ArrayAID*, we also capture *ArrayBID* to condition the next task in Job_2. 
+Again we use **--parsable ** option, but now beside to capture the *ArrayAID*, we also capture *ArrayBID* to condition the next process in Job_2. 
 
-After successfully completed the corresponding array process in *ArrayAID* and *ArrayBID*, it starts the corresponding array process in Job_2
+After successfully completed the corresponding array-id process *ArrayAID* and *ArrayBID*, it starts the next array-id process in Job_2.
 
 <br>
 
-Here, is another example that triggers Job_2 only if both Jobs, 0 and 1, were successfully completed.  
+More examples provided below highlight the relevance of Slurm job design to properly build the workflow.
 
-```slurm
-# sbatch --array=1-5 --dependency=aftercorr:${ArrayAID} ${ArrayBID} Job_2.sh
-```
+### Examples with job-dependency 
 
-What matters in Slurm's array dependencies is to design the correct workflow before to code the script. 
+![Image 3.Fig3](images/fig3_slurm_array.png) Image 3. Job with one dependency. <br><br>
+
+<br>
+
+![Image 4.Fig4](images/fig4_slurm_array.png) Image 4. Job with two dependencies. <br><br>
+
+<br>
+
+### Examples with Job-array dependencies recursively
+
+A task of this job array can begin execution after the corresponding task ID in the specified job has completed successfully.
+
+![Image 5.Fig5](images/fig5_slurm_array.png) Image 5. Job-array dependencies nested. <br><br>
+
+<br>
+
+![Image 5.Fig6](images/fig6_slurm_array.png) Image 5. Job-array dependencies nested 2. <br><br>
+
+<br>
 
 
 ***
