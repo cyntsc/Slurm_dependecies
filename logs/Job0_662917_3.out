@@ -1,0 +1,19 @@
+Adding LIBD SLURM modules
+**** SLURM info Job 0 ****
+     Job-array with no dependencies
+Mon Oct 30 11:28:16 AM EDT 2023
+
+User: csoto
+Job name (script): Job_0.sh
+Hostname (computer node): compute-115.cm.cluster
+
+Job id: 662930
+Task id: 3
+
+Sample name: file_3.txt
+
+== Start: create txt file ==
+[1] "/dcs04/lieber/lcolladotor/Habenula_R01_LIBD4270/HPC_multiome_pilot"
+[1] "file_3.txt"
+[1] TRUE
+== End of Job ==
