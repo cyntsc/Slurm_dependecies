@@ -50,6 +50,7 @@ The Job_1 is a job-array that triggers 5 processes to add lines to pre-existing 
 
 ![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
 
+***
 
 Now we need to link these dependencies in a logic way to build a Slurm-array with dependencies pipeline.
 
@@ -88,13 +89,17 @@ sbatch --array=1-5 --dependency=aftercorr:${ArrayBID} Job_2.sh
 ```
 
 
-Again we use **--parsable ** option, but now beside to capture the *ArrayAID*, we also capture *ArrayBID* to condition the next process in Job_2. 
+Again we use **--parsable** option, but now beside to capture the *ArrayAID*, we also capture *ArrayBID* to condition the next process in Job_2. 
 
 After successfully completed the corresponding array-id process *ArrayAID* and *ArrayBID*, it starts the next array-id process in Job_2.
 
 <br>
 
 More examples provided below highlight the relevance of Slurm job design to properly build the workflow.
+
+<br><br>
+
+***
 
 ### Examples with job-dependency 
 
@@ -104,7 +109,7 @@ More examples provided below highlight the relevance of Slurm job design to prop
 
 ![Image 4.Fig4](images/fig4_slurm_array.png) Image 4. Job with two dependencies. <br><br>
 
-<br>
+<br><br>
 
 ### Examples with Job-array dependencies recursively
 
