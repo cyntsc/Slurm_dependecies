@@ -1,7 +1,7 @@
 # Slurm_dependecies
 ## Building pipelines using slurm dependencies
 
-Here briefly provide easy samples to understand slurm-dependency and slurm-array dependency concepts
+Here you will find a brief explanation with examples to understand *slurm-dependency* and *slurm-array dependency* concepts. Follow the flow and feel free to test the code.
 
 ***
 
@@ -38,7 +38,7 @@ Now, with these two SLURM's options we can build pipelines combining job-arrays 
 
 1. In figure 1A and 1B, we have association 1:1, one R-script to 1 Slurm-Job. 
 
-![Image 1.Job0_Job1](images/fig1_slurm_array.png) Image 1. Job_1 is a dependency of Job_0. <br><br>
+![Image 1.Job0_Job1](images/fig1_slurm_array.png) <p style="text-align:center"> Image 1. Job_1 is a dependency of Job_0. </p> <br><br>
 
 
 The Job_0 is a job-array that triggers 5 processes to build 5 txt files.
@@ -48,7 +48,7 @@ The Job_1 is a job-array that triggers 5 processes to add lines to pre-existing 
 
 2. To add a bit more of complexity, now let's add a third script to add a numeric line to the pre-exisiting files after the *Job_0* and *Job_1* were successfully completed.
 
-![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) Image 2. Job_1 and Job2 are dependency files of Job_0. <br><br>
+![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) <p style="text-align:center"> Image 2. Job_1 and Job2 are dependency files of Job_0. </p> <br><br>
 
 ***
 
@@ -103,11 +103,11 @@ More examples provided below highlight the relevance of Slurm job design to prop
 
 ### Examples with job-dependency 
 
-![Image 3.Fig3](images/fig3_slurm_array.png) Image 3. Job with one dependency. <br><br>
+![Image 3.Fig3](images/fig3_slurm_array.png) <p style="text-align:center"> Image 3. Job with one dependency.  </p> <br><br>
 
 <br>
 
-![Image 4.Fig4](images/fig4_slurm_array.png) Image 4. Job with two dependencies. <br><br>
+![Image 4.Fig4](images/fig4_slurm_array.png) <p style="text-align:center"> Image 4. Job with two dependencies.  </p> <br><br>
 
 <br><br>
 
@@ -115,11 +115,11 @@ More examples provided below highlight the relevance of Slurm job design to prop
 
 A task of this job array can begin execution after the corresponding task ID in the specified job has completed successfully.
 
-![Image 5.Fig5](images/fig5_slurm_array.png) Image 5. Job-array dependencies nested. <br><br>
+![Image 5.Fig5](images/fig5_slurm_array.png) <p style="text-align:center"> Image 5. Job-array dependencies nested.  </p> <br><br>
 
 <br>
 
-![Image 5.Fig6](images/fig6_slurm_array.png) Image 5. Job-array dependencies nested 2. <br><br>
+![Image 6.Fig6](images/fig6_slurm_array.png) <p style="text-align:center"> Image 6. Another Job-array dependencies nested.  </p> <br><br>
 
 <br>
 
@@ -136,5 +136,28 @@ Nov 3rd, 2023
 <br>
 
 ***
+
+<br>
+
+**Consulted resources:**
+
+
+http://research.libd.org/slurmjobs/ 
+
+https://groups.oist.jp/scs/advanced-slurm
+
+https://www.icg.port.ac.uk/support-kb/ex-9-slurm-arrays-deps/ 
+
+https://stackoverflow.com/questions/73389379/slurm-job-array-with-dependent-jobs
+
+<br><br>
+
+**Other resources:**
+
+
+You can request a Data Science guidance sessions (DSgs) with us!
+Here: https://lcolladotor.github.io/bioc_team_ds/data-science-guidance-sessions.html 
+
+<br><br>
 
 
