@@ -33,7 +33,7 @@ echo ""
 # This will runs after first and second dependencies have been completed. 
 sbatch --array=1-5 --dependency=aftercorr:${ArrayBID} Job_2.sh
 
-# This is an arrangment for indendent process 
+# This is for an arrangement of independent processes
 # sbatch --array=1-5 --dependency=aftercorr:${ArrayAID} ${ArrayBID} Job_2.sh
 
 echo "=== End of Job ==="
