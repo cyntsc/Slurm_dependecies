@@ -158,9 +158,7 @@ A task of this job array can begin execution after the corresponding task ID in 
 <br>
 
 
-***
-
-<br>
+That's all folks!
 
 
 *Cynthia SC*
