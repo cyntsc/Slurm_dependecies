@@ -2,12 +2,11 @@
 ## Building pipelines using slurm dependencies
 
 Here you will find a brief explanation with examples to understand *slurm-dependency* and *slurm-array dependency* concepts. Follow the flow and feel free to test the code.
-
-***
+<br><br>
 
 ### Introduction to Job array and Job dependency 
 
-A **Job-array** is the best and recommended way to submit many jobs (>100) using SLURM’s jobs array feature. The job arrays allow managing big number of jobs more effectively and faster. To specify job array use *--array*, follow for the number of jobs you will have in array:
+A **Job-array** is the best and recommended way to submit many jobs (>100) using SLURM’s jobs array feature. The job arrays allow managing big number of jobs more effectively and faster. To specify job array use **--array**, follow for the number of jobs you will have in array:
 
 Some examples are:
 
@@ -19,24 +18,46 @@ Some examples are:
 
 <br>
 
-A **Job-dependency** in contrast is a particular *Job* that must be launched only after previous *jobs* were successfully completed. SLURM provides a way to implement such pipelines with its *--dependency* option.
+A **Job-dependency** in the other hand is a particular *Job* that must be launched only after previous *jobs* were successfully completed. SLURM provides a way to implement such pipelines with its **--dependency** option.
 
-Dependency options available are:
 
-**--dependency=afterok:<job_id>**: Submitted job will be launched if and only if job with job_id identifier was successfully completed. If job_id is a job array, then all jobs in that job array must be successfully completed.
+You can submit a job that only runs after successful completion of the first job with specific labels, like **“afterok”** as the dependency type. 
 
-**--dependency=afternotok:<job_id>**: Submitted job will be launched if and only if job with job_id identifier failed. If job_id is a job array, then at least one job in that array failed. This option may be useful for cleanup step.
+```diff
++ $ jobID=$(sbatch --parsable job.cmd)
++ $ sbatch --dependency=afterok:${jobID} second_job.cmd
+```
 
-**--dependency=afterany:<job_id>**: Submitted job wil be launched after job with job_id identifier terminated i.e. completed successfully or failed.
+Note that, by adding the **“–parsable”** option to “sbatch command”, only the job ID would be returned and its value can be stored in a shell variable for later use.
+
+<br> 
+
+More popular dependency types used for **<type:job_id>** are: 
+
+
+| Option                                | Description      |
+|:--------------------------------------|:-----------------|
+| **--dependency=afterok:<job_id>**     | Submitted job will be launched if and only if job with job_id identifier was successfully completed. If job_id is a job array, then all jobs in that job array must be successfully completed. | 
+| **--dependency=afternotok:<job_id>**  | Submitted job will be launched if and only if job with job_id identifier failed. If job_id is a job array, then at least one job in that array failed. This option may be useful for cleanup step. | 
+| **--dependency=afterany:<job_id>**    | Submitted job wil be launched after job with job_id identifier terminated i.e. completed successfully or failed. | 
+
 
 <br>
 
 
-Now, with these two SLURM's options we can build pipelines combining job-arrays with slurm dependencies. 
+Since version 16.05, Slurm has an option of **--dependency=aftercorr:job_id[:jobid...]**. A task of this job array can begin execution after the corresponding task ID if the specified job has completed successfully. This option is commonly used to run Job-array dependencies recursively.
 
-### Job-array to Job-dependency file association
+There are other options.
 
-1. In figure 1A and 1B, we have association 1:1, one R-script to 1 Slurm-Job. 
+<br> 
+
+Now, with these SLURM's options we can build pipelines combining slurm array with slurm dependencies. 
+
+<br> 
+
+### Job-array: single dependency
+
+In figure 1A and 1B, we have a sequence A --> B
 
 ![Image 1.Job0_Job1](images/fig1_slurm_array.png) <p style="text-align:center"> Image 1. Job_1 is a dependency of Job_0. </p> <br><br>
 
@@ -46,25 +67,37 @@ The Job_1 is a job-array that triggers 5 processes to add lines to pre-existing 
 
 <br>
 
-2. To add a bit more of complexity, now let's add a third script to add a numeric line to the pre-exisiting files after the *Job_0* and *Job_1* were successfully completed.
+### Job-array dependency: independent or sequenced
 
-![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) <p style="text-align:center"> Image 2. Job_1 and Job2 are dependency files of Job_0. </p> <br><br>
+To add a bit more of complexity, now let's add a third Job to add numeric lines to the pre-exisiting txt files after the *Job_0* and *Job_1* were successfully completed.
 
-***
-
-Now we need to link these dependencies in a logic way to build a Slurm-array with dependencies pipeline.
+![Image 2.Job0_Job1_Job2](images/fig2_slurm_array.png) <p style="text-align:center"> Image 2. Job_1 and Job2 are dependencies of Job_0. </p> <br><br>
 
 
-To link the first job dependency:
+### Does the order of the processes matter?
 
-```slurm
+<br>
+
+![Image 7.Job0_order](images/fig7_slurm_array.png) <p style="text-align:center"> Image 3. In the top figure the processes are always executed in the same order. In the bottom figure there are two independent processes with two possible outputs. </p> <br><br>
+
+<br>
+
+
+### Job-array dependency nested
+
+We use logic to build the Job-array dependencies recursively. Let's to build the next pipeline: **( A → B ) → C**
+
+First, we link the first job dependency:
+
+```diff
 # Create 5 txt files and add lines to them"
-ArrayAID=$(sbatch --parsable --array=1-5  Job_0.sh)
-echo "Job-Array. ID: ${ArrayAID}"
-echo ""
++ ArrayAID=$(sbatch --parsable --array=1-5  Job_0.sh)
+# echo "Job-Array. ID: ${ArrayAID}"
+# echo ""
 # This will runs after first dependency has been completed. Add lines to pre-existing file.
-sbatch --array=1-5 --dependency=aftercorr:${ArrayAID} Job_1.sh
++ sbatch --array=1-5 --dependency=aftercorr:${ArrayAID} Job_1.sh
 ```
+Not run this code! copy from scripts.
 
 **--parsable** option capture the slurm ID (number) assigned to control each *Array Id*. Thus, with *ArrayAID* variable we can conditioned the next task. 
 
@@ -72,21 +105,22 @@ After successfully completed the corresponding array process using the *ArrayAID
 
 <br>
 
-To link the first and second job dependencies:
+Second, we link the second dependency:
 
-```slurm
+```diff
 # Create 5 txt files and add lines to them"
-ArrayAID=$(sbatch --parsable --array=1-5  Job_0.sh)
-echo "Job-Array. Dependency 1 ID: ${ArrayAID}"
-echo ""
++ ArrayAID=$(sbatch --parsable --array=1-5  Job_0.sh)
+# echo "Job-Array. Dependency 1 ID: ${ArrayAID}"
+# echo ""
 # Add lines to pre-existing file
-ArrayBID=$(sbatch --parsable --array=1-5 --dependency=aftercorr:${ArrayAID} Job_1.sh)
-echo "Job-Array. Dependency 2 ID: ${ArrayBID}"
-echo ""
++ ArrayBID=$(sbatch --parsable --array=1-5 --dependency=aftercorr:${ArrayAID} Job_1.sh)
+# echo "Job-Array. Dependency 2 ID: ${ArrayBID}"
+# echo ""
 # Add numbers to pre-existing file
 # This will runs after first and second dependencies have been completed. 
-sbatch --array=1-5 --dependency=aftercorr:${ArrayBID} Job_2.sh
++ sbatch --array=1-5 --dependency=aftercorr:${ArrayBID} Job_2.sh
 ```
+Not run this code! copy from scripts.
 
 
 Again we use **--parsable** option, but now beside to capture the *ArrayAID*, we also capture *ArrayBID* to condition the next process in Job_2. 
@@ -99,15 +133,15 @@ More examples provided below highlight the relevance of Slurm job design to prop
 
 <br><br>
 
-***
+
 
 ### Examples with job-dependency 
 
-![Image 3.Fig3](images/fig3_slurm_array.png) <p style="text-align:center"> Image 3. Job with one dependency.  </p> <br><br>
+![Image 3.Fig3](images/fig3_slurm_array.png) <p style="text-align:center"> Image 4. Job with one dependency.  </p> <br><br>
 
 <br>
 
-![Image 4.Fig4](images/fig4_slurm_array.png) <p style="text-align:center"> Image 4. Job with two dependencies.  </p> <br><br>
+![Image 4.Fig4](images/fig4_slurm_array.png) <p style="text-align:center"> Image 5. Job with two dependencies.  </p> <br><br>
 
 <br><br>
 
@@ -115,11 +149,11 @@ More examples provided below highlight the relevance of Slurm job design to prop
 
 A task of this job array can begin execution after the corresponding task ID in the specified job has completed successfully.
 
-![Image 5.Fig5](images/fig5_slurm_array.png) <p style="text-align:center"> Image 5. Job-array dependencies nested.  </p> <br><br>
+![Image 5.Fig5](images/fig5_slurm_array.png) <p style="text-align:center"> Image 6. Job-array dependencies nested.  </p> <br><br>
 
 <br>
 
-![Image 6.Fig6](images/fig6_slurm_array.png) <p style="text-align:center"> Image 6. Another Job-array dependencies nested.  </p> <br><br>
+![Image 6.Fig6](images/fig6_slurm_array.png) <p style="text-align:center"> Image 7. Another Job-array dependencies nested.  </p> <br><br>
 
 <br>
 
@@ -143,6 +177,8 @@ Nov 3rd, 2023
 
 
 http://research.libd.org/slurmjobs/ 
+
+https://hpc.hku.hk/guide/slurm-guide/slurm-job-dependencies/
 
 https://groups.oist.jp/scs/advanced-slurm
 
