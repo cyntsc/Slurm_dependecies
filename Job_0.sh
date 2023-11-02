@@ -17,8 +17,6 @@ mkdir -p $logpath
 
 module load R
 
-# Specify the path to the config file
-# config=/dcs04/lieber/lcolladotor/Habenula_R01_LIBD4270/HPC_multiome_pilot/pattern_scripts_slurm/slurm_array_job_dependencies/array_targets_names.txt
 
 echo "**** SLURM info Job 0 ****"
 echo "     Job-array with no dependencies"

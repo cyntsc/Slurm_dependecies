@@ -3,7 +3,7 @@ library(here)
 here::here()
 
 # create output dir
-sub_dir <- here('slurm_array_job_dependencies', 'outputs/')
+sub_dir <- here('/fastscratch/myscratch/csoto/Slurm_dependecies', 'outputs/')
 if (!file.exists(sub_dir)){ dir.create(file.path(sub_dir)) }
 
 # scan the argument and compose a file name
@@ -13,7 +13,7 @@ file_name <- paste0(sub_dir, x_name)
 file.create(file_name)
 
 # write a header
-header_l1 <- paste0('This is the header for ', basename(file_name))
+header_l1 <- paste0('This is the header for ', basename(file_name), '\n\n')
 # cat function to append the text to the text file 
 cat(header_l1, sep = "\n", file = file_name, append = TRUE) 
 

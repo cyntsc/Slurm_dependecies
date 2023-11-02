@@ -5,7 +5,7 @@ here::here()
 
 ########################### Add vector of numbers to pre-existing file
 
-sub_dir <- here('pattern_scripts_slurm', 'slurm_array_job_dependencies/outputs/')
+sub_dir <- here('/fastscratch/myscratch/csoto/Slurm_dependecies', 'outputs/')
 
 # if (!file.exists(sub_dir)){ stop('Directory does not exists') }
 
