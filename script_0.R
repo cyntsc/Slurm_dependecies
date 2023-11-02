@@ -3,7 +3,7 @@ library(here)
 here::here()
 
 # create output dir
-sub_dir <- here('pattern_scripts_slurm', 'slurm_array_job_dependencies/outputs/')
+sub_dir <- here('slurm_array_job_dependencies', 'outputs/')
 if (!file.exists(sub_dir)){ dir.create(file.path(sub_dir)) }
 
 # scan the argument and compose a file name

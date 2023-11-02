@@ -11,7 +11,7 @@ id=$(sed -n ${SLURM_ARRAY_TASK_ID}p array_target_names.txt)
 #SBATCH --mem=5GB				                                    
 
 # Create log
-logpath="/dcs04/lieber/lcolladotor/Habenula_R01_LIBD4270/HPC_multiome_pilot/code/04_preprocessing_ATAC/logs/"
+logpath="/users/csoto/csoto/Slurm_dependecies/logs/"
 mkdir -p $logpath
 # echo "Log folder created"
 
