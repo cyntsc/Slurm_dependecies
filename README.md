@@ -1,7 +1,11 @@
 # Slurm_dependecies
 ## Building pipelines using slurm dependencies
 
-Here you will find a brief explanation with examples to understand *slurm-dependency* and *slurm-array dependency* concepts. Follow the flow and feel free to test the code.
+Here you will find a brief explanation with examples to understand *slurm-dependency* and *slurm-array dependency* concepts. 
+
+Follow the flow and feel free to test the code. 
+
+**Note: be sure to have a log\ and output\ directories before running code.**
 <br><br>
 
 ### Introduction to Job array and Job dependency 
